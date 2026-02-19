@@ -6,7 +6,7 @@ public class Player {
     private int rating;
     private int matchesPlayed;
     private int matchesWon;
-    private ArrayList<String> titles;
+    private ArrayList<TitleWrapper> titles;
 
     public Player(int id, String name, int rating) {
         this.id = id;
@@ -23,7 +23,7 @@ public class Player {
     public int getRating() {return rating;}
     public int getMatchesPlayed() {return matchesPlayed;}
     public int getMatchesWon() {return matchesWon;}
-    public ArrayList<String> getTitles() {return titles;}
+    public ArrayList<TitleWrapper> getTitles() {return titles;}
 
     public void setRating(int rating) {this.rating = rating;}
 
@@ -47,28 +47,17 @@ public class Player {
 
     public void setMatchesWon(int matchesWon) { this.matchesWon = matchesWon; }
 
-    public void addTitle(String title) {
+    public void addTitle(TitleWrapper title) {
         if (titles == null) {
             titles = new ArrayList<>();
         }
         titles.add(title);
     }
 
-    public void removeTitle(String title) {
-        if (titles != null) {
-            titles.remove(title);
+    public void setTitle(int index, TitleWrapper title) {
+        if (titles == null) {
+            titles = new ArrayList<>();
         }
-    }
-
-    public void removeTitle(int index) {
-        if (titles != null && index >= 0 && index < titles.size()) {
-            titles.remove(index);
-        }
-    }
-
-    public void clearTitles() {
-        if (titles != null) {
-            titles.clear();
-        }
+        titles.set(index, title);
     }
 }

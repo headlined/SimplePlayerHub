@@ -11,6 +11,8 @@ public class Data {
     public static final File DATAFILE = getDataFile();
     public static ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<Match> matches = new ArrayList<>();
+    public static ArrayList<Event> events = new ArrayList<>();
+    public static ArrayList<Series> serieses = new ArrayList<>();
     public static ArrayList<Set> tempSets = new ArrayList<>();
 
     public static void createNewPlayer(String name) {
@@ -47,6 +49,10 @@ public class Data {
         Match newMatch = new Match(newMatchId, matchType, new ArrayList<>(tempSets));
         matches.add(newMatch);
         tempSets.clear();
+    }
+
+    public static void createEvent(String name, int matchType) {
+        events.add(new Event(name, new ArrayList<>(), new ArrayList<>(), matchType));
     }
 
     public static File getDataFile() {
