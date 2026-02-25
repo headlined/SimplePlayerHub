@@ -1,18 +1,19 @@
 import java.util.ArrayList;
 
 public class Set {
-    public ArrayList<Player> players;
+    public ArrayList<Integer> players;
     public ArrayList<Integer> teams;
     public ArrayList<Integer> scores;
     public int winner;
 
-    public Set(ArrayList<Player> players, ArrayList<Integer> teams, ArrayList<Integer> scores) {
+    public Set(ArrayList<Integer> players, ArrayList<Integer> teams, ArrayList<Integer> scores) {
         this.players = players;
         this.teams = teams;
         this.scores = scores;
+        determineWinner();
     }
 
-    public void determineWinner() {
+    private void determineWinner() {
         ArrayList<Integer> teamScores = new ArrayList<>();
         for (int i = 0; i < teams.size(); i++) {
             int team = teams.get(i);

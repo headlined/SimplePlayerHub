@@ -40,7 +40,11 @@ public class Data {
     }
 
     public static void createSet(ArrayList<Player> players, ArrayList<Integer> teams, ArrayList<Integer> scores) {
-        Set newSet = new Set(players, teams, scores);
+        ArrayList<Integer> playerIds = new ArrayList<>();
+
+        for (Player player : players) {playerIds.add(player.getId());}
+
+        Set newSet = new Set(playerIds, teams, scores);
         tempSets.add(newSet);
     }
 
@@ -52,7 +56,12 @@ public class Data {
     }
 
     public static void createEvent(String name, int matchType) {
-        events.add(new Event(name, new ArrayList<>(), new ArrayList<>(), matchType));
+        events.add(new Event(name, new ArrayList<>(), new ArrayList<>(), matchType, null));
+    }
+
+    public static void createEvent(Series series) {
+        events.add(new Event(series.newEventName(), new ArrayList<>(), new ArrayList<>(),  series.getMatchType(), series));
+        series.addEvent(events.size() - 1);
     }
 
     public static File getDataFile() {
@@ -95,8 +104,9 @@ public class Data {
             DataWrapper wrapper = gson.fromJson(jsonData, DataWrapper.class);
             if (wrapper != null) {
                 players = wrapper.players != null ? wrapper.players : new ArrayList<>();
+                serieses = wrapper.serieses != null ? wrapper.serieses : new ArrayList<>();
+                events = wrapper.events != null ? wrapper.events : new ArrayList<>();
                 matches = wrapper.matches != null ? wrapper.matches : new ArrayList<>();
-                tempSets = wrapper.tempSets != null ? wrapper.tempSets : new ArrayList<>();
             }
         } catch (IOException e) {
             System.out.println("An error occurred while loading data from data.json");
@@ -106,15 +116,17 @@ public class Data {
     private static DataWrapper DataToWrapper() {
         DataWrapper wrapper = new DataWrapper();
         wrapper.players = players;
+        wrapper.serieses = serieses;
+        wrapper.events = events;
         wrapper.matches = matches;
-        wrapper.tempSets = tempSets;
 
         return wrapper;
     }
 
     private static class DataWrapper {
         ArrayList<Player> players;
+        ArrayList<Series> serieses;
+        ArrayList<Event> events;
         ArrayList<Match> matches;
-        ArrayList<Set> tempSets;
     }
 }
