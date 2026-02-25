@@ -21,33 +21,34 @@ public class Series {
     }
 
     public void updateTitles() {
-        ArrayList<Player> placements = Data.events.get(events.size() - 1).getPlacements();
+        System.out.println("Updating titles...");
+        ArrayList<Integer> placements = Data.events.get(events.get(events.size() - 1)).getPlacements();
         for (int i = 0; i < placements.size(); i++) {
             int titleIndex = -1;
-            for (TitleWrapper title : placements.get(i).getTitles()) {
+            for (TitleWrapper title : Data.getPlayerById(placements.get(i)).getTitles()) {
                 if (title.series.equals(name)) {
-                    titleIndex = placements.get(i).getTitles().indexOf(title);
+                    titleIndex = Data.getPlayerById(placements.get(i)).getTitles().indexOf(title);
 
-                    String recentPlacement = getTitleFromPlacement(i + 1, placements.size()) + " (" + addPrefix(events.size()) + ")";
+                    String recentPlacement = String.format("%1$s (%2$s)", getTitleFromPlacement((int) ((double) i / matchType + 1), placements.size()), newEventName(-1));
                     TitleWrapper newTitle = new TitleWrapper(name, title.wins, title.runnerUps, title.thirds, recentPlacement);
 
-                    switch (i) {
+                    switch ((int) ((double) i / matchType)) {
                         case 0 -> newTitle.wins++;
                         case 1 -> newTitle.runnerUps++;
                         case 2 -> newTitle.thirds++;
                         default -> {}
                     }
 
-                    placements.get(i).setTitle(titleIndex, newTitle);
+                    Data.getPlayerById(placements.get(i)).setTitle(titleIndex, newTitle);
                     break;
                 }
             }
 
             if (titleIndex == -1) {
-                String recentPlacement = getTitleFromPlacement(i + 1, placements.size()) + " (" + addPrefix(events.size()) + ")";
+                String recentPlacement = String.format("%1$s (%2$s)", getTitleFromPlacement((int) ((double) i / matchType + 1), placements.size()), newEventName(-1));
                 TitleWrapper newTitle = new TitleWrapper(name, 0, 0, 0, recentPlacement);
 
-                switch (i) {
+                switch ((int) ((double) i / matchType)) {
                     case 0 -> newTitle.wins++;
                     case 1 -> newTitle.runnerUps++;
                     case 2 -> newTitle.thirds++;
@@ -55,7 +56,7 @@ public class Series {
                     }
                 }
 
-                placements.get(i).addTitle(newTitle);
+                Data.getPlayerById(placements.get(i)).addTitle(newTitle);
             }
         }
     }
@@ -89,7 +90,7 @@ public class Series {
     }
 
     private String addPrefix(int placement) {
-        String prefix = "";
+        String prefix = "th";
         int baseNum = Math.abs(placement) % 10;
 
         if (baseNum == 1 && placement != 11) {prefix = "st";}
@@ -122,7 +123,7 @@ public class Series {
     private String assortedPlacement(int placement, int size) {
         String range = "";
 
-        for (int i = 4; i < placement; i*=2) {
+        for (int i = 4; i <= placement; i*=2) {
             if (i >= placement) {
                 if (i > size) {
                     range = "Group Stage";
@@ -139,13 +140,18 @@ public class Series {
 
     public String getName() {return name;}
 
-    public String newEventName() {
+    public String newEventName(int offset) {
         return switch (namingScheme) {
-            case 1 -> addPrefix(events.size() + 1) + name;
-            case 2 -> name + " #" + (events.size() + 1);
+            case 1 -> addPrefix(events.size() + 1 + offset) + " " + name;
+            case 2 -> name + " #" + (events.size() + 1 + offset);
             default -> throw new AssertionError();
         };
     }
 
+    public String newEventName() {return newEventName(0);}
+
     public int getMatchType() {return matchType;}
+
+    @Override
+    public String toString() {return name;}
 }
