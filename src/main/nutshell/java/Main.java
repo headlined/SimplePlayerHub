@@ -181,9 +181,9 @@ public class Main {
 
     private static Object scrollList(ArrayList<?> list) {
         int page = 1;
-        int maxPage = (int) Math.abs(list.size()/9 - 0.1) + 1;
         int itemsOnPage;
         while (true) {
+            int maxPage = (int) Math.abs((double) list.size()/9 - 0.1) + 1;
             itemsOnPage = (page < maxPage) ? 9 : (list.size() % 9 == 0 && !list.isEmpty()) ? 9 : list.size() % 9;
 
             System.out.println("\nPage " + page + " of " + maxPage);
@@ -209,9 +209,11 @@ public class Main {
 
                 if (option >= 1) {
                     if (page < maxPage) {
-                        return list.get(option - 1);
+                        if (option <= 9) {
+                            return list.get(option - 1);
+                        }
                     } else if (option <= itemsOnPage) {
-                        return list.get(option - 1);
+                        return list.get(option + 9 * (page - 1) - 1);
                     } else {
                         System.out.print("Invalid Option \"" + option + "\" Please try again: ");
                         option = 0;

@@ -73,7 +73,7 @@ public class Player {
                 profile += String.format("%nWins: %1$d%n", title.wins);
                 profile += String.format("Runner-Ups: %1$d%n", title.runnerUps);
                 profile += String.format("Third Places: %1$d%n", title.thirds);
-                profile += String.format("Most Recent Placement: %1$s%n", title.recentPlacement);
+                profile += String.format("Most Recent Placement: %1$s%n%n", title.recentPlacement);
             }
         }
 
