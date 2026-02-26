@@ -1,0 +1,5 @@
+target/
+bin/
+.vscode/
+
+# add anything else you DONT want send to github
